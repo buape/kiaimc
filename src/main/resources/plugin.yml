@@ -1,0 +1,9 @@
+name: KiaiMC
+version: ${project.version}
+main: com.buape.kiaimc.KiaiMC
+api-version: 1.20
+author: thewilloftheshadow
+depend: [DiscordSRV]
+load: POSTWORLD
+website: "https://github.com/buape/KiaiMC"
+description: Synchronize your in-game messages with Kiai's XP
