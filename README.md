@@ -13,3 +13,13 @@ KiaiMC is a simple plugin that enables players to receive XP in [Kiai](https://k
 This plugin uses [DiscordSRV](https://modrinth.com/plugin/discordsrv) as the linking system between your Minecraft server and Discord server, so make sure that you have it installed and setup using the `linking.yml` file in DiscordSRV's configuration, and have a chat channel set within Discord.
 
 You can use the `global` channel you setup in DiscordSRV to add any multipliers or blacklists to in-game chat. User and role blacklists will be applied based on the Minecraft player's linked Discord account.
+
+## Installation
+
+Installation of KiaiMC is simple. Drop the .jar file into your server's plugins folder, and restart the server. A config.yml file will be generated, and you can place an API token in there.
+
+You can get a token to use for your application by joining [our support server](https://go.buape.com/discord) and posting in the #kiai-support channel there.
+We are working on a web dashboard to make this process automated, but in the meantime, you will need to provide the following:
+
+- A unique ID (typically your bot's ID)
+- An application name
