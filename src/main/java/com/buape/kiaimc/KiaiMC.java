@@ -89,7 +89,7 @@ public final class KiaiMC extends JavaPlugin {
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.kiaibot.com/v1/guild/" + guildId + "/virtual_message"))
+                    .uri(URI.create("https://api.kiai.app/v1/guild/" + guildId + "/virtual_message"))
                     .header("Authorization", this.token)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
