@@ -116,3 +116,7 @@ tasks.shadowJar {
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
+
+tasks.jar {
+    dependsOn(tasks.shadowJar)
+}
