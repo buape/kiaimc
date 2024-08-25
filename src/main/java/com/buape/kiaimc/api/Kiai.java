@@ -55,7 +55,7 @@ public class Kiai {
         requestQueueManager.queueRequest("/guild/" + guildId + "/user/" + userId + "/xp", "PATCH", jsonMap);
     }
 
-    public void removeXp(String guildId, String userId, int amount, String reason) {
+    public void removeXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("amount", amount);
         jsonMap.put("remove", true);

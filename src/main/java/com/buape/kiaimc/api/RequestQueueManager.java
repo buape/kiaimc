@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class RequestQueueManager {
 	private final HttpClient client;
 	private final Logger logger;
@@ -55,14 +53,11 @@ public class RequestQueueManager {
 	}
 
 	private HttpResponse<String> sendRequest(QueuedRequest queuedRequest) throws IOException, InterruptedException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestBodyString = objectMapper.writeValueAsString(queuedRequest.requestBody);
-
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://api.kiai.app/v1" + queuedRequest.endpoint))
 				.header("Authorization", this.token)
 				.header("Content-Type", "application/json")
-				.method(queuedRequest.method, HttpRequest.BodyPublishers.ofString(requestBodyString))
+				.method(queuedRequest.method, HttpRequest.BodyPublishers.ofString(queuedRequest.requestBody.toString()))
 				.build();
 
 		return this.client.send(request, HttpResponse.BodyHandlers.ofString());

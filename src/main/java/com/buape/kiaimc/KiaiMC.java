@@ -12,6 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.buape.kiaimc.api.Kiai;
 import com.buape.kiaimc.modules.BonusMessageModule;
 import com.buape.kiaimc.modules.ChatModule;
+import com.buape.kiaimc.commands.XpCommand;
+
+import co.aikar.commands.PaperCommandManager;
 
 public final class KiaiMC extends JavaPlugin {
     public final Logger logger = this.getLogger();
@@ -25,13 +28,14 @@ public final class KiaiMC extends JavaPlugin {
         if (configIsValid) {
             getConfig().options().copyDefaults();
             saveDefaultConfig();
-
             new Metrics(this, 18414);
+
             String token = getConfig().getString("token");
 
-            if (token.isBlank()) {
+            if (token == null || token.isBlank()) {
                 logger.severe("No token was supplied for the Kiai API, stopping KiaiMC.");
                 Bukkit.getPluginManager().disablePlugin(this);
+                return;
             }
 
             this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"));
@@ -40,6 +44,7 @@ public final class KiaiMC extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new BonusMessageModule(this), this);
             getServer().getPluginManager().registerEvents(new ChatModule(this), this);
 
+            new PaperCommandManager(this).registerCommand(new XpCommand(this));
         }
     }
 
@@ -72,7 +77,6 @@ public final class KiaiMC extends JavaPlugin {
                     this.logger.severe(
                             "Your config is outdated, but I could not move your old config to a backup or copy in the new config format.");
                 }
-
             }
 
             this.logger.severe(
@@ -92,5 +96,4 @@ public final class KiaiMC extends JavaPlugin {
             this.logger.info(message);
         }
     }
-
 }
