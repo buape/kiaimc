@@ -98,9 +98,19 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
+tasks.processResources {
+    filesMatching("plugin.yml") {
+        expand("version" to project.version)
+    }
+}
+
 tasks.shadowJar {
     relocate("co.aikar.commands", "com.buape.kiaimc.acf")
     relocate("co.aikar.locales", "com.buape.kiaimc.locales")
+
+    exclude("META-INF/*.DSA")
+    exclude("META-INF/*.RSA")
+    exclude("META-INF/*.SF")
 }
 
 tasks.build {
