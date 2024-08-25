@@ -3,7 +3,28 @@
 # See https://docs.kiai.app/features/api for more information on how to get this
 token: ""
 
+# There are two modes for playtime tracking:
+# 1) Every X seconds, the user will receive a "bonus message", where they get the same amount of XP as they would have received if they had sent a message.
+# 2) Every X seconds, the user will receive a set amount of XP.
+# You can use one, or both, or neither, as they work independently.
+
+bonus-message:
+  # Whether or not to enable the bonus message mode
+  enabled: false
+  # The number of seconds between each bonus message
+  interval: 60
+  # Use blacklist permission to prevent players from receiving bonus messages
+  blacklist-permissions: []
+
+playtime-xp:
+  # Whether or not to enable the playtime XP mode
+  enabled: true
+  # The number of seconds between each xp award
+  interval: 60
+  # The amount of XP to award
+  amount: 1
+
 # Debug mode
 debug: false
 # DO NOT MANUALLY CHANGE THIS
-config-version: 1
+config-version: 2
