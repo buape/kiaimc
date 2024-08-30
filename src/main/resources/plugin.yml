@@ -1,7 +1,7 @@
 name: KiaiMC
 version: ${version}
 main: com.buape.kiaimc.KiaiMC
-api-version: 1.20
+api-version: 1.21.1
 author: thewilloftheshadow
 depend: [DiscordSRV]
 load: POSTWORLD
