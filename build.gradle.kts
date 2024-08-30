@@ -1,9 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id("java")
     id("java-library")
     id("maven-publish")
     id("signing")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.0"
 }
 
 repositories {
@@ -11,16 +13,32 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://nexus.scarsz.me/content/groups/public/")
     maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://repo.aikar.co/content/groups/aikar/")
     maven("https://repo1.maven.org/maven2/")
+    maven("https://repo.codemc.org/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("com.discordsrv:discordsrv:1.28.0")
-    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
-    implementation("org.bstats:bstats-bukkit:3.0.3")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     implementation("commons-io:commons-io:2.16.1")
-    implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.5.2")
+}
+
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.2"))
+        include(dependency("org.bstats:bstats-bukkit:3.0.3"))
+    }
+
+    relocate("dev.jorel.commandapi", "com.buape.kiaimc.commandapi")
+}
+
+tasks.named<ShadowJar>("shadowJar") {
+    archiveClassifier.set("")
+}
+
+tasks.build {
+    dependsOn("shadowJar")
 }
 
 group = "com.buape"
@@ -28,14 +46,8 @@ version = "2.0.0"
 description = "KiaiMC - Integrating Kiai's extensive leveling system with Minecraft servers"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-parameters")
-    options.isFork = true
-    // options.forkOptions.executable = "javac"
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 publishing {
@@ -102,21 +114,4 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand("version" to project.version)
     }
-}
-
-tasks.shadowJar {
-    relocate("co.aikar.commands", "com.buape.kiaimc.acf")
-    relocate("co.aikar.locales", "com.buape.kiaimc.locales")
-
-    exclude("META-INF/*.DSA")
-    exclude("META-INF/*.RSA")
-    exclude("META-INF/*.SF")
-}
-
-tasks.build {
-    dependsOn(tasks.shadowJar)
-}
-
-tasks.jar {
-    dependsOn(tasks.shadowJar)
 }

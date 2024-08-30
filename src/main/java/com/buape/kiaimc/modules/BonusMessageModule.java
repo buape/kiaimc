@@ -15,15 +15,16 @@ public class BonusMessageModule implements Listener {
 
 	public BonusMessageModule(KiaiMC kiaiMC) {
 		this.plugin = kiaiMC;
+
+		int interval = plugin.getConfig().getInt("bonus-message.interval");
+
+		plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkBonusMessage, interval * 20, interval * 20);
+
+		this.plugin.debug(String
+				.format("Bonus message module has been enabled, will give a bonus message every %s seconds", interval));
 	}
 
-	public void onEnable() {
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::checkBonusMessage,
-				plugin.getConfig().getInt("bonus-message.interval") * 20,
-				plugin.getConfig().getInt("bonus-message.interval") * 20);
-	}
-
-	public void onDisable() {
+	public void disable() {
 		plugin.getServer().getScheduler().cancelTasks(plugin);
 	}
 
@@ -40,7 +41,7 @@ public class BonusMessageModule implements Listener {
 				return;
 			}
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
-			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember);
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
 		});
 	}
 }

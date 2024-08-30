@@ -11,15 +11,18 @@ public class PlayTimeModule {
 
 	public PlayTimeModule(KiaiMC plugin) {
 		this.plugin = plugin;
+
+		int interval = plugin.getConfig().getInt("playtime-xp.interval");
+		int amount = plugin.getConfig().getInt("playtime-xp.amount");
+
+		plugin.getServer().getScheduler().runTaskTimer(plugin, this::playTimeXp, interval * 20, interval * 20);
+
+		this.plugin.debug(
+				String.format("Playtime XP module has been enabled, will give %s xp every %s seconds", amount,
+						interval));
 	}
 
-	public void onEnable() {
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::playTimeXp,
-				plugin.getConfig().getInt("bonus-message.interval") * 20,
-				plugin.getConfig().getInt("bonus-message.interval") * 20);
-	}
-
-	public void onDisable() {
+	public void disable() {
 		plugin.getServer().getScheduler().cancelTasks(plugin);
 	}
 

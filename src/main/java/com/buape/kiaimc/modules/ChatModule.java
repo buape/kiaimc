@@ -20,6 +20,8 @@ public class ChatModule implements Listener {
 
 	public ChatModule(KiaiMC kiaiMC) {
 		this.plugin = kiaiMC;
+
+		this.plugin.debug("Chat module has been enabled");
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -37,7 +39,7 @@ public class ChatModule implements Listener {
 			plugin.debug("Player " + player.getName() + " is linked to " + discordPlayerId
 					+ ", processing Kiai XP through DiscordSRV. (Guild ID: " + mainGuild.getId() + ")");
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
-			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember);
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
 		}
 	}
 

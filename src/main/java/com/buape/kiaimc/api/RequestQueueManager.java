@@ -13,6 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
+import com.google.gson.Gson;
 
 public class RequestQueueManager {
 	private final HttpClient client;
@@ -21,6 +22,7 @@ public class RequestQueueManager {
 	private final ScheduledExecutorService executorService;
 	private final Queue<QueuedRequest> requestQueue = new LinkedList<>();
 	private final Boolean debug;
+	private final Gson gson;
 
 	public RequestQueueManager(Logger logger, String token, Boolean debug) {
 		this.client = HttpClient.newHttpClient();
@@ -28,6 +30,7 @@ public class RequestQueueManager {
 		this.token = token;
 		this.debug = debug;
 		this.executorService = Executors.newSingleThreadScheduledExecutor();
+		this.gson = new Gson();
 	}
 
 	public CompletableFuture<String> queueRequest(String endpoint, String method, HashMap<String, Object> requestBody) {
@@ -53,19 +56,24 @@ public class RequestQueueManager {
 	}
 
 	private HttpResponse<String> sendRequest(QueuedRequest queuedRequest) throws IOException, InterruptedException {
+		String jsonBody = gson.toJson(queuedRequest.requestBody);
+
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://api.kiai.app/v1" + queuedRequest.endpoint))
 				.header("Authorization", this.token)
 				.header("Content-Type", "application/json")
-				.method(queuedRequest.method, HttpRequest.BodyPublishers.ofString(queuedRequest.requestBody.toString()))
+				.method(queuedRequest.method, HttpRequest.BodyPublishers.ofString(jsonBody))
 				.build();
+
+		debug(String.format("Sending request to %s with body %s", request.uri(), jsonBody));
 
 		return this.client.send(request, HttpResponse.BodyHandlers.ofString());
 	}
 
 	private void handleResponse(HttpResponse<String> response, QueuedRequest queuedRequest) {
 		if (response.statusCode() == 401 || response.statusCode() == 403) {
-			this.logger.warning("Your API token is not authorized");
+			this.logger.warning(
+					"Your Kiai API token is not authorized, please use the /application authorize command from Kiai in Discord to authorize your bot.");
 			queuedRequest.future.completeExceptionally(new RuntimeException("Unauthorized"));
 			return;
 		}

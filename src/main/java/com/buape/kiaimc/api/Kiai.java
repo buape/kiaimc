@@ -17,15 +17,16 @@ public class Kiai {
         this.requestQueueManager = new RequestQueueManager(logger, token, debug);
     }
 
-    private void debug(String message) {
+    public void debug(String message) {
         if (this.debug) {
             this.logger.info(message);
         }
     }
 
-    public void virtualMessage(String guildId, String channelId, Member guildMember) {
+    public void virtualMessage(String guildId, String channelId, Member guildMember, String channelParentId) {
         HashMap<String, Object> channel = new HashMap<>();
         channel.put("id", channelId);
+        channel.put("parentId", channelParentId);
 
         HashMap<String, Object> member = new HashMap<>();
         member.put("id", guildMember.getId());
@@ -43,32 +44,28 @@ public class Kiai {
         jsonMap.put("member", member);
         jsonMap.put("guild", guild);
 
-        this.debug("Sending request with body from DiscordSRV data: " + jsonMap.toString());
         requestQueueManager.queueRequest("/guild/" + guildId + "/virtual_message", "POST", jsonMap);
     }
 
     public void addXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("amount", amount);
+        jsonMap.put("xp", amount);
 
-        this.debug("Sending request with body: " + jsonMap.toString());
-        requestQueueManager.queueRequest("/guild/" + guildId + "/user/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public void removeXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("amount", amount);
+        jsonMap.put("xp", amount);
         jsonMap.put("remove", true);
 
-        this.debug("Sending request with body: " + jsonMap.toString());
-        requestQueueManager.queueRequest("/guild/" + guildId + "/user/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public CompletableFuture<String> getUser(String guildId, String userId) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("user", userId);
 
-        this.debug("Sending request with body: " + jsonMap.toString());
-        return requestQueueManager.queueRequest("/guild/" + guildId + "/user/" + userId + "/xp", "GET", jsonMap);
+        return requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "GET", jsonMap);
     }
 }

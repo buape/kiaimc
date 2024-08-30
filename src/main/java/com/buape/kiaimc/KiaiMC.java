@@ -5,16 +5,19 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.buape.kiaimc.api.Kiai;
 import com.buape.kiaimc.modules.BonusMessageModule;
 import com.buape.kiaimc.modules.ChatModule;
-import com.buape.kiaimc.commands.XpCommand;
+import com.buape.kiaimc.modules.CommandModule;
+import com.buape.kiaimc.modules.PlayTimeModule;
 
-import co.aikar.commands.PaperCommandManager;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPILogger;
+import github.scarsz.discordsrv.dependencies.bstats.bukkit.Metrics;
 
 public final class KiaiMC extends JavaPlugin {
     public final Logger logger = this.getLogger();
@@ -40,12 +43,29 @@ public final class KiaiMC extends JavaPlugin {
 
             this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"));
 
-            getServer().getPluginManager().registerEvents(new ChatModule(this), this);
-            getServer().getPluginManager().registerEvents(new BonusMessageModule(this), this);
-            getServer().getPluginManager().registerEvents(new ChatModule(this), this);
+            if (getConfig().getBoolean("chat.enabled")) {
+                getServer().getPluginManager().registerEvents(new ChatModule(this), this);
+            }
+            if (getConfig().getBoolean("bonus-message.enabled")) {
+                new BonusMessageModule(this);
+            }
+            if (getConfig().getBoolean("playtime-xp.enabled")) {
+                new PlayTimeModule(this);
+            }
 
-            new PaperCommandManager(this).registerCommand(new XpCommand(this));
+            CommandAPI.onEnable();
+            new CommandModule(this).registerAllCommands();
         }
+    }
+
+    @Override
+    public void onLoad() {
+        CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
+        CommandAPI.onLoad(
+                new CommandAPIBukkitConfig(this)
+                        .verboseOutput(this.getConfig().getBoolean("debug"))
+                        .usePluginNamespace()
+                        .dispatcherFile(new File(getDataFolder(), "command_registration.json")));
     }
 
     @Override
