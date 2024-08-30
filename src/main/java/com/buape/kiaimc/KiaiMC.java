@@ -5,30 +5,25 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
+import com.buape.kiaimc.api.Kiai;
+import com.buape.kiaimc.modules.BonusMessageModule;
+import com.buape.kiaimc.modules.ChatModule;
+import com.buape.kiaimc.modules.CommandModule;
+import com.buape.kiaimc.modules.PlayTimeModule;
 
-import com.buape.kiaimc.listeners.AsyncChatListener;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import github.scarsz.discordsrv.DiscordSRV;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPILogger;
+import github.scarsz.discordsrv.dependencies.bstats.bukkit.Metrics;
 
 public final class KiaiMC extends JavaPlugin {
     public final Logger logger = this.getLogger();
 
-    public final int currentConfig = 1;
-    private String token;
+    public final int currentConfig = 2;
+    public Kiai api;
 
     @Override
     public void onEnable() {
@@ -36,82 +31,41 @@ public final class KiaiMC extends JavaPlugin {
         if (configIsValid) {
             getConfig().options().copyDefaults();
             saveDefaultConfig();
-
             new Metrics(this, 18414);
-            this.token = getConfig().getString("token");
 
-            if (this.token.isBlank()) {
+            String token = getConfig().getString("token");
+
+            if (token == null || token.isBlank()) {
                 logger.severe("No token was supplied for the Kiai API, stopping KiaiMC.");
                 Bukkit.getPluginManager().disablePlugin(this);
+                return;
             }
 
-            getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
+            this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"));
+
+            if (getConfig().getBoolean("chat.enabled")) {
+                getServer().getPluginManager().registerEvents(new ChatModule(this), this);
+            }
+            if (getConfig().getBoolean("bonus-message.enabled")) {
+                new BonusMessageModule(this);
+            }
+            if (getConfig().getBoolean("playtime-xp.enabled")) {
+                new PlayTimeModule(this);
+            }
+
+            CommandAPI.onEnable();
+            new CommandModule(this).registerAllCommands();
         }
     }
 
-    public void triggerMessage(String guildId, String userId, String channelId) {
-        Guild mainGuild = DiscordSRV.getPlugin().getMainGuild();
-
-        Member guildMember = mainGuild.getMemberById(userId);
-
-        // Channel ID
-        HashMap<String, Object> channel = new HashMap<>();
-        channel.put("id", channelId);
-
-        // Member ID
-        HashMap<String, Object> member = new HashMap<>();
-        member.put("id", userId);
-
-        // Role list
-        HashMap<String, Object> role = new HashMap<>();
-        guildMember.getRoles().forEach(r -> role.put("id", r.getId()));
-
-        // Add roles to member
-        member.put("roles", new HashMap[] { role });
-
-        // Guild ID
-        HashMap<String, Object> guild = new HashMap<>();
-        guild.put("id", guildId);
-
-        // Combine them together
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("channel", channel);
-        jsonMap.put("member", member);
-        jsonMap.put("guild", guild);
-
-        var objectMapper = new ObjectMapper();
-        String requestBody;
-        try {
-            requestBody = objectMapper
-                    .writeValueAsString(jsonMap);
-
-            this.debug("Sending request with body from DiscordSRV data: " + requestBody);
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.kiai.app/v1/guild/" + guildId + "/virtual_message"))
-                    .header("Authorization", this.token)
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 401 || response.statusCode() == 403) {
-                this.logger.warning(
-                        "Your API token is not authorized in guild " + mainGuild + " (ID received from DiscordSRV)");
-            }
-
-            this.debug(
-                    "Response with DiscordSRV data: " + response.body() + " and status code " + response.statusCode());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    @Override
+    public void onLoad() {
+        CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
+        CommandAPI.onLoad(
+                new CommandAPIBukkitConfig(this)
+                        .verboseOutput(this.getConfig().getBoolean("debug"))
+                        .usePluginNamespace()
+                        .dispatcherFile(new File(getDataFolder(), "command_registration.json")));
     }
 
     @Override
@@ -143,7 +97,6 @@ public final class KiaiMC extends JavaPlugin {
                     this.logger.severe(
                             "Your config is outdated, but I could not move your old config to a backup or copy in the new config format.");
                 }
-
             }
 
             this.logger.severe(
@@ -163,5 +116,4 @@ public final class KiaiMC extends JavaPlugin {
             this.logger.info(message);
         }
     }
-
 }

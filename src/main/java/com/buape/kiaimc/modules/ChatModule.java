@@ -1,4 +1,4 @@
-package com.buape.kiaimc.listeners;
+package com.buape.kiaimc.modules;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,16 +9,19 @@ import com.buape.kiaimc.KiaiMC;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.objects.managers.AccountLinkManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
 
-public class AsyncChatListener implements Listener {
+public class ChatModule implements Listener {
 
-	private final KiaiMC kiaiMC;
+	private final KiaiMC plugin;
 
-	public AsyncChatListener(KiaiMC kiaiMC) {
-		this.kiaiMC = kiaiMC;
+	public ChatModule(KiaiMC kiaiMC) {
+		this.plugin = kiaiMC;
+
+		this.plugin.debug("Chat module has been enabled");
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -31,12 +34,12 @@ public class AsyncChatListener implements Listener {
 		String discordPlayerId = accountLinkManager.getDiscordId(player.getUniqueId());
 
 		if (discordPlayerId == null || discordPlayerId.isBlank()) {
-			this.kiaiMC
-					.debug("Player " + player.getName() + " is not linked, not processing Kiai XP through DiscordSRV.");
+			plugin.debug("Player " + player.getName() + " is not linked, not processing Kiai XP through DiscordSRV.");
 		} else {
-			this.kiaiMC.debug("Player " + player.getName() + " is linked to " + discordPlayerId
+			plugin.debug("Player " + player.getName() + " is linked to " + discordPlayerId
 					+ ", processing Kiai XP through DiscordSRV. (Guild ID: " + mainGuild.getId() + ")");
-			this.kiaiMC.triggerMessage(mainGuild.getId(), discordPlayerId, channel.getId());
+			Member guildMember = mainGuild.getMemberById(discordPlayerId);
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
 		}
 	}
 

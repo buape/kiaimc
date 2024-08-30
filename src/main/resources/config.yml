@@ -3,7 +3,30 @@
 # See https://docs.kiai.app/features/api for more information on how to get this
 token: ""
 
+# There are three ways that players can receive XP
+# 1. Players can send messages in-game that will be converted into XP, just like Discord messages would
+# 2. Every X seconds, the user will receive a fixed amount of XP.
+# 3. Every X seconds, the user will receive a "bonus message", where they get the same amount of XP calculated as they would have received if they had sent a message, based on your settings in Kiai on Discord.
+
+chat:
+  # Whether or not to enable the chat module
+  enabled: true
+
+playtime-xp:
+  # Whether or not to enable the playtime XP mode
+  enabled: false
+  # The number of seconds between each xp award
+  interval: 300
+  # The amount of XP to award
+  amount: 1
+
+bonus-message:
+  # Whether or not to enable the bonus message mode
+  enabled: false
+  # The number of seconds between each bonus message
+  interval: 300
+
 # Debug mode
 debug: false
 # DO NOT MANUALLY CHANGE THIS
-config-version: 1
+config-version: 2
