@@ -29,9 +29,3 @@ We are working on a web dashboard to make this process automated, but in the mea
 
 - A unique ID (typically your bot's ID)
 - An application name
-
-
-[KiaiMC] Sending request to https://api.kiai.app/v1/guild/1041045270659604701/virtual_message with body 
-
-
-
