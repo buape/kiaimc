@@ -11,10 +11,10 @@ public class Kiai {
     private final Boolean debug;
     private final RequestQueueManager requestQueueManager;
 
-    public Kiai(String token, Logger logger, Boolean debug) {
+    public Kiai(String token, Logger logger, Boolean debug, String baseUrl) {
         this.logger = logger;
         this.debug = debug;
-        this.requestQueueManager = new RequestQueueManager(logger, token, debug);
+        this.requestQueueManager = new RequestQueueManager(logger, token, debug, baseUrl);
     }
 
     public void debug(String message) {

@@ -41,7 +41,13 @@ public final class KiaiMC extends JavaPlugin {
                 return;
             }
 
-            this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"));
+            String baseUrl = getConfig().getString("base-url");
+
+            if (getConfig().getString("base-url") == null || getConfig().getString("base-url").isBlank()) {
+                baseUrl = "https://api.kiai.app/v1";
+            }
+
+            this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"), baseUrl);
 
             if (getConfig().getBoolean("chat.enabled")) {
                 getServer().getPluginManager().registerEvents(new ChatModule(this), this);

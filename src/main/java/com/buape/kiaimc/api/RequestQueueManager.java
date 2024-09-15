@@ -19,16 +19,18 @@ public class RequestQueueManager {
 	private final HttpClient client;
 	private final Logger logger;
 	private final String token;
+	private final String baseUrl;
 	private final ScheduledExecutorService executorService;
 	private final Queue<QueuedRequest> requestQueue = new LinkedList<>();
 	private final Boolean debug;
 	private final Gson gson;
 
-	public RequestQueueManager(Logger logger, String token, Boolean debug) {
+	public RequestQueueManager(Logger logger, String token, Boolean debug, String baseUrl) {
 		this.client = HttpClient.newHttpClient();
 		this.logger = logger;
 		this.token = token;
 		this.debug = debug;
+		this.baseUrl = baseUrl;
 		this.executorService = Executors.newSingleThreadScheduledExecutor();
 		this.gson = new Gson();
 	}
@@ -59,7 +61,7 @@ public class RequestQueueManager {
 		String jsonBody = gson.toJson(queuedRequest.requestBody);
 
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://api.kiai.app/v1" + queuedRequest.endpoint))
+				.uri(URI.create(this.baseUrl + queuedRequest.endpoint))
 				.header("Authorization", this.token)
 				.header("Content-Type", "application/json")
 				.method(queuedRequest.method, HttpRequest.BodyPublishers.ofString(jsonBody))
