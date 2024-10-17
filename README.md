@@ -24,7 +24,7 @@ You can use the `global` channel you setup in DiscordSRV to add any multipliers 
 
 Installation of KiaiMC is simple. Drop the .jar file into your server's plugins folder, and restart the server. A config.yml file will be generated, and you can place an API token in there.
 
-You can get a token to use for your application by joining [our support server](https://go.buape.com/discord) and posting in the #kiai-support channel there.
+You can get a token to use for your application by joining [our support server](https://discord.gg/ZmzdX8pKUW) and posting in the #kiai-support channel there.
 We are working on a web dashboard to make this process automated, but in the meantime, you will need to provide the following:
 
 - A unique ID (typically your bot's ID)
