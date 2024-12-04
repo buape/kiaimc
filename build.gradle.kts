@@ -21,12 +21,12 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     implementation("commons-io:commons-io:2.16.1")
-    implementation("dev.jorel:commandapi-bukkit-shade:9.5.3")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.7.0")
 }
 
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.3"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.7.0"))
         include(dependency("org.bstats:bstats-bukkit:3.0.3"))
     }
 
