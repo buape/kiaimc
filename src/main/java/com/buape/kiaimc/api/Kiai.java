@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 
 public class Kiai {
+    private static final Gson gson = new Gson();
     private final Logger logger;
     private final Boolean debug;
     private final RequestQueueManager requestQueueManager;
@@ -30,11 +33,7 @@ public class Kiai {
 
         HashMap<String, Object> member = new HashMap<>();
         member.put("id", guildMember.getId());
-
-        HashMap<String, Object> role = new HashMap<>();
-        guildMember.getRoles().forEach(r -> role.put("id", r.getId()));
-
-        member.put("roles", new HashMap[] { role });
+        member.put("roleIds", guildMember.getRoles().stream().map(role -> role.getId()).toList());
 
         HashMap<String, Object> guild = new HashMap<>();
         guild.put("id", guildId);
@@ -44,28 +43,28 @@ public class Kiai {
         jsonMap.put("member", member);
         jsonMap.put("guild", guild);
 
-        requestQueueManager.queueRequest("/guild/" + guildId + "/virtual_message", "POST", jsonMap);
+        requestQueueManager.queueRequest("/virtual_message", "POST", jsonMap);
     }
 
     public void addXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", amount);
 
-        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public void removeXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("xp", amount);
-        jsonMap.put("remove", true);
+        jsonMap.put("xp", 0 - amount);
 
-        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
-    public CompletableFuture<String> getUser(String guildId, String userId) {
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("user", userId);
-
-        return requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "GET", jsonMap);
+    public CompletableFuture<User> getUser(String guildId, String userId) {
+        return requestQueueManager.queueRequest("/" + guildId + "/member/" + userId, "GET", null)
+                .thenApply(response -> {
+                    JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+                    return gson.fromJson(jsonObject.get("data"), User.class);
+                });
     }
 }
