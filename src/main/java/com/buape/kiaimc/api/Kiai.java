@@ -47,17 +47,30 @@ public class Kiai {
     }
 
     public void addXp(String guildId, String userId, int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("XP amount cannot be negative");
+        }
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", amount);
-
-        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        try {
+            requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        } catch (Exception e) {
+            logger.warning("Failed to add XP: " + e.getMessage());
+            throw e;
+        }
     }
-
     public void removeXp(String guildId, String userId, int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("XP amount cannot be negative");
+        }
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", 0 - amount);
-
-        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        try {
+            requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        } catch (Exception e) {
+            logger.warning("Failed to remove XP: " + e.getMessage());
+            throw e;
+        }
     }
 
     public CompletableFuture<User> getUser(String guildId, String userId) {
