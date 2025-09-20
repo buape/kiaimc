@@ -1,7 +1,8 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
     "yaml.schemas": {
-        "https://json.schemastore.org/bukkit-plugin.json": "file:///Users/shadow/Documents/Coding/KiaiMC/src/main/resources/plugin.yml"
+        "https://json.schemastore.org/bukkit-plugin.json": "file:///Users/shadow/Documents/Coding/KiaiMC/src/main/resources/plugin.yml",
+        "https://www.schemastore.org/paper-plugin.json": "file:///workspaces/kiaimc/src/main/resources/plugin.yml"
     },
     "cSpell.words": [
         "addxp",

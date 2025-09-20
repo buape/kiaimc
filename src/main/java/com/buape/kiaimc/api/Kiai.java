@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Role;
 
 public class Kiai {
     private final Logger logger;
@@ -23,60 +24,61 @@ public class Kiai {
         }
     }
 
-    public void virtualMessage(String guildId, String channelId, Member guildMember, String channelParentId, String messageId, String content) {
-            // Defensive input validation
-            if (guildMember == null) {
-                logger.severe("Kiai.virtualMessage: guildMember is null");
-                throw new IllegalArgumentException("guildMember cannot be null");
-            }
-            if (guildId == null || guildId.isEmpty()) {
-                logger.severe("Kiai.virtualMessage: guildId is null or empty");
-                throw new IllegalArgumentException("guildId cannot be null or empty");
-            }
-            if (channelId == null || channelId.isEmpty()) {
-                logger.severe("Kiai.virtualMessage: channelId is null or empty");
-                throw new IllegalArgumentException("channelId cannot be null or empty");
-            }
-            if (messageId == null || messageId.isEmpty()) {
-                logger.severe("Kiai.virtualMessage: messageId is null or empty");
-                throw new IllegalArgumentException("messageId cannot be null or empty");
-            }
-            if (content == null || content.isEmpty()) {
-                logger.severe("Kiai.virtualMessage: content is null or empty");
-                throw new IllegalArgumentException("content cannot be null or empty");
-            }
-            // channelParentId is optional, but log if missing
-            if (channelParentId == null || channelParentId.isEmpty()) {
-                logger.warning("Kiai.virtualMessage: channelParentId is null or empty");
-            }
+    public void virtualMessage(String guildId, String channelId, Member guildMember, String channelParentId,
+            String messageId, String content) {
+        // Defensive input validation
+        if (guildMember == null) {
+            logger.severe("Kiai.virtualMessage: guildMember is null");
+            throw new IllegalArgumentException("guildMember cannot be null");
+        }
+        if (guildId == null || guildId.isEmpty()) {
+            logger.severe("Kiai.virtualMessage: guildId is null or empty");
+            throw new IllegalArgumentException("guildId cannot be null or empty");
+        }
+        if (channelId == null || channelId.isEmpty()) {
+            logger.severe("Kiai.virtualMessage: channelId is null or empty");
+            throw new IllegalArgumentException("channelId cannot be null or empty");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            logger.severe("Kiai.virtualMessage: messageId is null or empty");
+            throw new IllegalArgumentException("messageId cannot be null or empty");
+        }
+        if (content == null || content.isEmpty()) {
+            logger.severe("Kiai.virtualMessage: content is null or empty");
+            throw new IllegalArgumentException("content cannot be null or empty");
+        }
+        // channelParentId is optional, but log if missing
+        if (channelParentId == null || channelParentId.isEmpty()) {
+            logger.warning("Kiai.virtualMessage: channelParentId is null or empty");
+        }
 
-            HashMap<String, Object> channel = new HashMap<>();
-            channel.put("id", channelId);
-            channel.put("parentId", channelParentId);
+        HashMap<String, Object> channel = new HashMap<>();
+        channel.put("id", channelId);
+        channel.put("parentId", channelParentId);
 
-            HashMap<String, Object> member = new HashMap<>();
-            member.put("id", guildMember.getId());
-            java.util.List<String> roleIds = new java.util.ArrayList<>();
-            java.util.List<Role> roles = guildMember.getRoles();
-            if (roles != null) {
-                roles.forEach(r -> roleIds.add(r.getId()));
-            }
-            member.put("roleIds", roleIds);
+        HashMap<String, Object> member = new HashMap<>();
+        member.put("id", guildMember.getId());
+        java.util.List<String> roleIds = new java.util.ArrayList<>();
+        java.util.List<Role> roles = guildMember.getRoles();
+        if (roles != null) {
+            roles.forEach(r -> roleIds.add(r.getId()));
+        }
+        member.put("roleIds", roleIds);
 
-            HashMap<String, Object> guild = new HashMap<>();
-            guild.put("id", guildId);
+        HashMap<String, Object> guild = new HashMap<>();
+        guild.put("id", guildId);
 
-            HashMap<String, Object> message = new HashMap<>();
-            message.put("id", messageId);
-            message.put("content", content);
+        HashMap<String, Object> message = new HashMap<>();
+        message.put("id", messageId);
+        message.put("content", content);
 
-            HashMap<String, Object> jsonMap = new HashMap<>();
-            jsonMap.put("channel", channel);
-            jsonMap.put("member", member);
-            jsonMap.put("guild", guild);
-            jsonMap.put("message", message);
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("channel", channel);
+        jsonMap.put("member", member);
+        jsonMap.put("guild", guild);
+        jsonMap.put("message", message);
 
-            requestQueueManager.queueRequest("/virtual_message", "POST", jsonMap);
+        requestQueueManager.queueRequest("/virtual_message", "POST", jsonMap);
     }
 
     public void addXp(String guildId, String userId, int amount) {
@@ -92,7 +94,8 @@ public class Kiai {
     }
 
     public CompletableFuture<KiaiUser> getUser(String guildId, String userId) {
-        CompletableFuture<String> responseFuture = requestQueueManager.queueRequest("/" + guildId + "/member/" + userId, "GET", null);
+        CompletableFuture<String> responseFuture = requestQueueManager.queueRequest("/" + guildId + "/member/" + userId,
+                "GET", null);
         CompletableFuture<KiaiUser> userFuture = new CompletableFuture<>();
         responseFuture.thenAccept(response -> {
             try {
