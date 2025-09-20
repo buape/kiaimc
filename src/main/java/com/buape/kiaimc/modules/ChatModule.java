@@ -39,7 +39,9 @@ public class ChatModule implements Listener {
 			plugin.debug("Player " + player.getName() + " is linked to " + discordPlayerId
 					+ ", processing Kiai XP through DiscordSRV. (Guild ID: " + mainGuild.getId() + ")");
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
-			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
+			String messageId = java.util.UUID.randomUUID().toString();
+			String content = event.message().toString();
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId(), messageId, content);
 		}
 	}
 

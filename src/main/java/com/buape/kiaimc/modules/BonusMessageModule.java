@@ -41,7 +41,9 @@ public class BonusMessageModule implements Listener {
 				return;
 			}
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
-			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
+			String messageId = java.util.UUID.randomUUID().toString();
+			String content = "Bonus message for " + player.getName();
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId(), messageId, content);
 		});
 	}
 }

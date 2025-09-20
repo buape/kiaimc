@@ -23,49 +23,58 @@ public class Kiai {
         }
     }
 
-    public void virtualMessage(String guildId, String channelId, Member guildMember, String channelParentId) {
+    public void virtualMessage(String guildId, String channelId, Member guildMember, String channelParentId, String messageId, String content) {
         HashMap<String, Object> channel = new HashMap<>();
         channel.put("id", channelId);
         channel.put("parentId", channelParentId);
 
         HashMap<String, Object> member = new HashMap<>();
         member.put("id", guildMember.getId());
-
-        HashMap<String, Object> role = new HashMap<>();
-        guildMember.getRoles().forEach(r -> role.put("id", r.getId()));
-
-        member.put("roles", new HashMap[] { role });
+        java.util.List<String> roleIds = new java.util.ArrayList<>();
+        guildMember.getRoles().forEach(r -> roleIds.add(r.getId()));
+        member.put("roleIds", roleIds);
 
         HashMap<String, Object> guild = new HashMap<>();
         guild.put("id", guildId);
+
+        HashMap<String, Object> message = new HashMap<>();
+        message.put("id", messageId);
+        message.put("content", content);
 
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("channel", channel);
         jsonMap.put("member", member);
         jsonMap.put("guild", guild);
+        jsonMap.put("message", message);
 
-        requestQueueManager.queueRequest("/guild/" + guildId + "/virtual_message", "POST", jsonMap);
+        requestQueueManager.queueRequest("/virtual_message", "POST", jsonMap);
     }
 
     public void addXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", amount);
-
-        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public void removeXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("xp", amount);
-        jsonMap.put("remove", true);
-
-        requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        jsonMap.put("xp", 0 - amount);
+        requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public CompletableFuture<String> getUser(String guildId, String userId) {
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("user", userId);
-
-        return requestQueueManager.queueRequest("/guild/" + guildId + "/member/" + userId + "/xp", "GET", jsonMap);
+        CompletableFuture<String> responseFuture = requestQueueManager.queueRequest(guildId + "/member/" + userId, "GET", null);
+        CompletableFuture<KiaiUser> userFuture = new CompletableFuture<>();
+        responseFuture.thenAccept(response -> {
+            try {
+                com.google.gson.JsonObject obj = new com.google.gson.JsonParser().parse(response).getAsJsonObject();
+                com.google.gson.JsonObject data = obj.getAsJsonObject("data");
+                KiaiUser user = new com.google.gson.Gson().fromJson(data, KiaiUser.class);
+                userFuture.complete(user);
+            } catch (Exception e) {
+                userFuture.completeExceptionally(e);
+            }
+        });
+        return userFuture;
     }
 }
