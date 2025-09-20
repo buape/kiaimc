@@ -41,7 +41,25 @@ public class BonusMessageModule implements Listener {
 				return;
 			}
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
-			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId());
+			String messageId = java.util.UUID.randomUUID().toString();
+			String content = "Bonus message for " + player.getName();
+			if (channel == null) {
+				plugin.getLogger().warning("BonusMessageModule: channel is null, cannot send bonus message.");
+				return;
+			}
+			if (channel.getParent() == null) {
+				plugin.getLogger().warning("BonusMessageModule: channel parent is null, cannot send bonus message.");
+				return;
+			}
+			if (guildMember == null) {
+				plugin.getLogger().warning("BonusMessageModule: guildMember is null, cannot send bonus message.");
+				return;
+			}
+			if (player == null) {
+				plugin.getLogger().warning("BonusMessageModule: player is null, cannot send bonus message.");
+				return;
+			}
+			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId(), messageId, content);
 		});
 	}
 }

@@ -22,6 +22,9 @@ You can use the `global` channel you setup in DiscordSRV to add any multipliers 
 
 ## Installation
 
+> [!NOTE]
+> Note: This plugin is always compiled against the latest stable version of both DiscordSRV and Paper. If you need an older version, please let us know in [our support server](https://discord.gg/ZmzdX8pKUW).
+
 Installation of KiaiMC is simple. Drop the .jar file into your server's plugins folder, and restart the server. A config.yml file will be generated, and you can place an API token in there.
 
 You can get a token to use for your application by joining [our support server](https://discord.gg/ZmzdX8pKUW) and posting in the #kiai-support channel there.
