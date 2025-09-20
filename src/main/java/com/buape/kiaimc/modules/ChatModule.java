@@ -40,7 +40,19 @@ public class ChatModule implements Listener {
 					+ ", processing Kiai XP through DiscordSRV. (Guild ID: " + mainGuild.getId() + ")");
 			Member guildMember = mainGuild.getMemberById(discordPlayerId);
 			String messageId = java.util.UUID.randomUUID().toString();
-			String content = event.message().toString();
+			if (guildMember == null) {
+				plugin.getLogger().warning("ChatModule: guildMember is null, cannot send chat message.");
+				return;
+			}
+			if (channel == null) {
+				plugin.getLogger().warning("ChatModule: channel is null, cannot send chat message.");
+				return;
+			}
+			if (channel.getParent() == null) {
+				plugin.getLogger().warning("ChatModule: channel parent is null, cannot send chat message.");
+				return;
+			}
+			String content = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(event.message());
 			plugin.api.virtualMessage(mainGuild.getId(), channel.getId(), guildMember, channel.getParent().getId(), messageId, content);
 		}
 	}
