@@ -62,7 +62,7 @@ public class Kiai {
         requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
-    public CompletableFuture<String> getUser(String guildId, String userId) {
+    public CompletableFuture<KiaiUser> getUser(String guildId, String userId) {
         CompletableFuture<String> responseFuture = requestQueueManager.queueRequest(guildId + "/member/" + userId, "GET", null);
         CompletableFuture<KiaiUser> userFuture = new CompletableFuture<>();
         responseFuture.thenAccept(response -> {

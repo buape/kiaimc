@@ -12,21 +12,21 @@ repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://nexus.scarsz.me/content/groups/public/")
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo1.maven.org/maven2/")
     maven("https://repo.codemc.org/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly("com.discordsrv:discordsrv:1.28.1")
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    implementation("commons-io:commons-io:2.16.1")
-    implementation("dev.jorel:commandapi-bukkit-shade:9.5.3")
+    compileOnly("com.discordsrv:discordsrv:1.30.1")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    implementation("commons-io:commons-io:2.20.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:10.1.2")
 }
 
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.3"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade:10.1.2"))
         include(dependency("org.bstats:bstats-bukkit:3.0.3"))
     }
 
@@ -42,7 +42,7 @@ tasks.build {
 }
 
 group = "com.buape"
-version = "2.1.0"
+version = "3.0.0"
 description = "KiaiMC - Integrating Kiai's extensive leveling system with Minecraft servers"
 
 java {
