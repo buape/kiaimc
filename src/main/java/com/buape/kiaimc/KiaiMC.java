@@ -43,7 +43,7 @@ public final class KiaiMC extends JavaPlugin {
 
             String baseUrl = getConfig().getString("base-url");
 
-            if (getConfig().getString("base-url") == null || getConfig().getString("base-url").isBlank()) {
+            if (baseUrl == null || baseUrl.isBlank()) {
                 baseUrl = "https://api.kiai.app/v2";
             }
 
