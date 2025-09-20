@@ -27,7 +27,7 @@ dependencies {
 tasks.withType<ShadowJar> {
     dependencies {
         include(dependency("dev.jorel:commandapi-bukkit-shade:10.1.2"))
-        include(dependency("org.bstats:bstats-bukkit:3.0.3"))
+        include(dependency("org.bstats:bstats-bukkit:3.1.0"))
     }
 
     relocate("dev.jorel.commandapi", "com.buape.kiaimc.commandapi")
