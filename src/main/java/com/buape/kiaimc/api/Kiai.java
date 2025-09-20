@@ -53,17 +53,17 @@ public class Kiai {
     public void addXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", amount);
-        requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public void removeXp(String guildId, String userId, int amount) {
         HashMap<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("xp", 0 - amount);
-        requestQueueManager.queueRequest(guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
+        requestQueueManager.queueRequest("/" + guildId + "/member/" + userId + "/xp", "PATCH", jsonMap);
     }
 
     public CompletableFuture<KiaiUser> getUser(String guildId, String userId) {
-        CompletableFuture<String> responseFuture = requestQueueManager.queueRequest(guildId + "/member/" + userId, "GET", null);
+        CompletableFuture<String> responseFuture = requestQueueManager.queueRequest("/" + guildId + "/member/" + userId, "GET", null);
         CompletableFuture<KiaiUser> userFuture = new CompletableFuture<>();
         responseFuture.thenAccept(response -> {
             try {
