@@ -2,7 +2,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-com-discordsrv-discordsrv = "1.28.1"
+com-discordsrv-discordsrv = "1.30.1"
 com-fasterxml-jackson-core-jackson-databind = "2.17.2"
 commons-io-commons-io = "2.16.1"
 io-papermc-paper-paper-api = "1.20-R0.1-SNAPSHOT"
