@@ -5,7 +5,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("signing")
-    id("com.gradleup.shadow") version "8.3.1"
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 repositories {
