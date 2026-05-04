@@ -14,9 +14,6 @@ import com.buape.kiaimc.modules.ChatModule;
 import com.buape.kiaimc.modules.CommandModule;
 import com.buape.kiaimc.modules.PlayTimeModule;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPILogger;
 import github.scarsz.discordsrv.dependencies.bstats.bukkit.Metrics;
 
 public final class KiaiMC extends JavaPlugin {
@@ -44,7 +41,7 @@ public final class KiaiMC extends JavaPlugin {
             String baseUrl = getConfig().getString("base-url");
 
             if (baseUrl == null || baseUrl.isBlank()) {
-                baseUrl = "https://api.kiai.app/v2";
+                baseUrl = "https://www.kiai.app/api/v2";
             }
 
             this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"), baseUrl);
@@ -59,19 +56,8 @@ public final class KiaiMC extends JavaPlugin {
                 new PlayTimeModule(this);
             }
 
-            CommandAPI.onEnable();
             new CommandModule(this).registerAllCommands();
         }
-    }
-
-    @Override
-    public void onLoad() {
-        CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
-        CommandAPI.onLoad(
-                new CommandAPIBukkitConfig(this)
-                        .verboseOutput(this.getConfig().getBoolean("debug"))
-                        .usePluginNamespace()
-                        .dispatcherFile(new File(getDataFolder(), "command_registration.json")));
     }
 
     @Override

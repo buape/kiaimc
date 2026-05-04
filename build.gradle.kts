@@ -17,20 +17,31 @@ repositories {
     maven("https://repo.codemc.org/repository/maven-public/")
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("org.codehaus.plexus:plexus-utils:4.0.3")
+        force("org.apache.commons:commons-lang3:3.18.0")
+    }
+}
+
+buildscript {
+    configurations.classpath {
+        resolutionStrategy.force("org.codehaus.plexus:plexus-utils:4.0.3")
+        resolutionStrategy.force("org.apache.commons:commons-lang3:3.18.0")
+    }
+}
+
 dependencies {
     compileOnly("com.discordsrv:discordsrv:1.30.1")
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation("commons-io:commons-io:2.20.0")
-    implementation("dev.jorel:commandapi-bukkit-shade:10.1.2")
+    compileOnly("dev.jorel:commandapi-bukkit-core:11.2.0")
 }
 
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:10.1.2"))
         include(dependency("org.bstats:bstats-bukkit:3.0.3"))
     }
-
-    relocate("dev.jorel.commandapi", "com.buape.kiaimc.commandapi")
 }
 
 tasks.named<ShadowJar>("shadowJar") {
@@ -42,7 +53,7 @@ tasks.build {
 }
 
 group = "com.buape"
-version = "3.0.0"
+version = "3.1.0"
 description = "KiaiMC - Integrating Kiai's extensive leveling system with Minecraft servers"
 
 java {
