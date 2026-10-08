@@ -34,7 +34,7 @@ buildscript {
 dependencies {
     compileOnly("com.discordsrv:discordsrv:1.30.1")
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    implementation("commons-io:commons-io:2.20.0")
+    implementation("commons-io:commons-io:2.22.0")
     compileOnly("dev.jorel:commandapi-bukkit-core:11.2.0")
 }
 
