@@ -4,6 +4,7 @@ main: com.buape.kiaimc.KiaiMC
 api-version: 1.21.11
 author: thewilloftheshadow
 depend: [DiscordSRV, CommandAPI]
+softdepend: [PlaceholderAPI]
 load: POSTWORLD
 website: "https://github.com/buape/KiaiMC"
 description: Synchronize your in-game messages and playtime with Kiai's XP

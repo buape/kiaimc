@@ -32,3 +32,18 @@ We are working on a web dashboard to make this process automated, but in the mea
 
 - A unique ID (typically your bot's ID)
 - An application name
+
+## PlaceholderAPI
+
+If [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) is installed, KiaiMC registers the `kiaimc` expansion automatically. Available placeholders include:
+
+- `%kiaimc_xp%`
+- `%kiaimc_level%` / `%kiaimc_current_level%`
+- `%kiaimc_next_level%`
+- `%kiaimc_next_level_xp%`
+- `%kiaimc_messages%` / `%kiaimc_messages_sent%`
+- `%kiaimc_voice%` / `%kiaimc_voice_minutes%`
+- `%kiaimc_xp_streak%` / `%kiaimc_current_xp_streak%`
+- `%kiaimc_streak_done_today%`
+
+Placeholder values are loaded from the Kiai API for the player linked through DiscordSRV and cached briefly to avoid blocking the server tick thread.

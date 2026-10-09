@@ -3,6 +3,7 @@
 # See https://docs.kiai.app/features/api for more information on how to get this
 token: ""
 
+
 # There are three ways that players can receive XP
 # 1. Players can send messages in-game that will be converted into XP, just like Discord messages would
 # 2. Every X seconds, the user will receive a fixed amount of XP.

@@ -15,6 +15,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo1.maven.org/maven2/")
     maven("https://repo.codemc.org/repository/maven-public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
 
 configurations.all {
@@ -36,6 +37,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation("commons-io:commons-io:2.22.0")
     compileOnly("dev.jorel:commandapi-bukkit-core:12.1.0")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 }
 
 tasks.withType<ShadowJar> {
