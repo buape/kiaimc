@@ -3,8 +3,6 @@
 # See https://docs.kiai.app/features/api for more information on how to get this
 token: ""
 
-# Kiai API base URL. Unless you are self-hosting Kiai, leave this as-is.
-base-url: "https://www.kiai.app/api/v3"
 
 # There are three ways that players can receive XP
 # 1. Players can send messages in-game that will be converted into XP, just like Discord messages would
