@@ -13,6 +13,7 @@ import com.buape.kiaimc.modules.BonusMessageModule;
 import com.buape.kiaimc.modules.ChatModule;
 import com.buape.kiaimc.modules.CommandModule;
 import com.buape.kiaimc.modules.PlayTimeModule;
+import com.buape.kiaimc.modules.PlaceholderModule;
 
 import github.scarsz.discordsrv.dependencies.bstats.bukkit.Metrics;
 
@@ -41,7 +42,7 @@ public final class KiaiMC extends JavaPlugin {
             String baseUrl = getConfig().getString("base-url");
 
             if (baseUrl == null || baseUrl.isBlank()) {
-                baseUrl = "https://www.kiai.app/api/v2";
+                baseUrl = "https://www.kiai.app/api/v3";
             }
 
             this.api = new Kiai(token, this.logger, this.getConfig().getBoolean("debug"), baseUrl);
@@ -57,6 +58,9 @@ public final class KiaiMC extends JavaPlugin {
             }
 
             new CommandModule(this).registerAllCommands();
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                new PlaceholderModule(this).register();
+            }
         }
     }
 
