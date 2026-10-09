@@ -37,7 +37,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation("commons-io:commons-io:2.22.0")
     compileOnly("dev.jorel:commandapi-bukkit-core:12.1.0")
-    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("me.clip:placeholderapi:2.12.3")
 }
 
 tasks.withType<ShadowJar> {
