@@ -42,7 +42,7 @@ dependencies {
 
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("org.bstats:bstats-bukkit:3.0.3"))
+        include(dependency("org.bstats:bstats-bukkit:3.2.1"))
     }
 }
 
