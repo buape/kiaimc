@@ -16,7 +16,7 @@ There are three ways that players can receive XP
 2. Every X seconds, the user will receive a fixed amount of XP.
 3. Every X seconds, the user will receive a "bonus message", where they get the same amount of XP calculated as they would have received if they had sent a message, based on your settings in Kiai on Discord.
 
-This plugin uses [DiscordSRV](https://modrinth.com/plugin/discordsrv) as the linking system between your Minecraft server and Discord server, so make sure that you have it installed and setup using the `linking.yml` file in DiscordSRV's configuration, and have a chat channel set within Discord.
+This plugin requires Java 25 or newer. It uses [DiscordSRV](https://modrinth.com/plugin/discordsrv) as the linking system between your Minecraft server and Discord server, so make sure that you have it installed and setup using the `linking.yml` file in DiscordSRV's configuration, and have a chat channel set within Discord.
 
 You can use the `global` channel you setup in DiscordSRV to add any multipliers or blacklists to in-game chat. User and role blacklists will be applied based on the Minecraft player's linked Discord account.
 

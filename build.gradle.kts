@@ -34,7 +34,7 @@ buildscript {
 
 dependencies {
     compileOnly("com.discordsrv:discordsrv:1.30.1")
-    compileOnly("io.papermc.paper:paper-api:26.3.build.189-stable")
+    compileOnly("io.papermc.paper:paper-api:26.3.build.193-stable")
     implementation("commons-io:commons-io:2.22.0")
     compileOnly("dev.jorel:commandapi-bukkit-core:12.1.0")
     compileOnly("me.clip:placeholderapi:2.12.3")
@@ -59,8 +59,8 @@ version = "3.1.0"
 description = "KiaiMC - Integrating Kiai's extensive leveling system with Minecraft servers"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 publishing {
