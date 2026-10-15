@@ -59,8 +59,8 @@ version = "3.1.0"
 description = "KiaiMC - Integrating Kiai's extensive leveling system with Minecraft servers"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 publishing {
