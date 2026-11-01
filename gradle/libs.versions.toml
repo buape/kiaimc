@@ -5,7 +5,7 @@
 com-discordsrv-discordsrv = "1.28.1"
 com-fasterxml-jackson-core-jackson-databind = "2.22.4"
 commons-io-commons-io = "2.22.0"
-io-papermc-paper-paper-api = "26.3.build.235-stable"
+io-papermc-paper-paper-api = "26.3.build.236-stable"
 org-bstats-bstats-bukkit = "3.0.3"
 
 [libraries]
