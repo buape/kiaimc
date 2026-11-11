@@ -21,14 +21,14 @@ repositories {
 configurations.all {
     resolutionStrategy {
         force("org.codehaus.plexus:plexus-utils:4.1.0")
-        force("org.apache.commons:commons-lang3:3.21.0")
+        force("org.apache.commons:commons-lang3:3.22.0")
     }
 }
 
 buildscript {
     configurations.classpath {
         resolutionStrategy.force("org.codehaus.plexus:plexus-utils:4.1.0")
-        resolutionStrategy.force("org.apache.commons:commons-lang3:3.21.0")
+        resolutionStrategy.force("org.apache.commons:commons-lang3:3.22.0")
     }
 }
 
